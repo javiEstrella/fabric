@@ -20,7 +20,7 @@ printHelp() {
   echo "options:"
   echo "-h : this help"
   echo "-d : bypass docker image download"
-  echo "-s : bypass fabric-samples repo clone"
+  echo "-s : bypass custom-samples repo clone"
   echo "-b : bypass download of platform-specific binaries"
   echo
   echo "e.g. bootstrap.sh 1.2.0 -s"
@@ -56,20 +56,20 @@ dockerCaPull() {
 }
 
 samplesInstall() {
-  # clone (if needed) hyperledger/fabric-samples and checkout corresponding
+  # clone (if needed) custom-samples and checkout corresponding
   # version to the binaries and docker images to be downloaded
   if [ -d first-network ]; then
-    # if we are in the fabric-samples repo, checkout corresponding version
-    echo "===> Checking out v${VERSION} branch of hyperledger/fabric-samples"
+    # if we are in the custom-samples repo, checkout corresponding version
+    echo "===> Checking out v${VERSION} branch of custom-samples"
     git checkout v${VERSION}
-  elif [ -d fabric-samples ]; then
-    # if fabric-samples repo already cloned and in current directory,
-    # cd fabric-samples and checkout corresponding version
-    echo "===> Checking out v${VERSION} branch of hyperledger/fabric-samples"
-    cd fabric-samples && git checkout v${VERSION}
+  elif [ -d custom-samples ]; then
+    # if custom-samples repo already cloned and in current directory,
+    # cd custom-samples and checkout corresponding version
+    echo "===> Checking out v${VERSION} branch of custom-samples"
+    cd custom-samples && git checkout v${VERSION}
   else
-    echo "===> Cloning hyperledger/fabric-samples repo and checkout v${VERSION}"
-    git clone -b master https://github.com/hyperledger/fabric-samples.git && cd fabric-samples && git checkout v${VERSION}
+    echo "===> Cloning custom-samples repo and checkout v${VERSION}"
+    git clone -b master https://github.com/javiEstrella/custom-samples.git && cd custom-samples && git checkout v${VERSION}
   fi
 }
 
@@ -171,7 +171,7 @@ dockerInstall() {
 }
 
 DOCKER=true
-SAMPLES=true
+CUSTOM_SAMPLES=true
 BINARIES=true
 
 # Parse commandline args pull out
@@ -210,16 +210,16 @@ while getopts "h?dsb" opt; do
     ;;
     d)  DOCKER=false
     ;;
-    s)  SAMPLES=false
+    s)  CUSTOM_SAMPLES=false
     ;;
     b)  BINARIES=false
     ;;
   esac
 done
 
-if [ "$SAMPLES" == "true" ]; then
+if [ "$CUSTOM_SAMPLES" == "true" ]; then
   echo
-  echo "Installing hyperledger/fabric-samples repo"
+  echo "Installing custom-samples repo"
   echo
   samplesInstall
 fi
